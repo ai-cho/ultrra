@@ -378,13 +378,12 @@ if __name__ == "__main__":
     parser.add_argument('--debug_from', type=int, default=-1)
     parser.add_argument('--detect_anomaly', action='store_true', default=False)
     parser.add_argument("--test_iterations", nargs="+", type=int, default=[i*5000 for i in range(1,20)])
-    parser.add_argument("--save_iterations", nargs="+", type=int, default=[30_000])
+    parser.add_argument("--save_iterations", nargs="+", type=int, default=[100, 500, 1_000, 5_000, 7_500, 10_000, 30_000, 50_000])
     parser.add_argument("--quiet", action="store_true")
     
     parser.add_argument("--render_after_train",  action='store_true', default=True)
     parser.add_argument("--metrics_after_train",  action='store_true', default=True)
     parser.add_argument("--data_perturb", nargs="+", type=str, default=[])#for lego ["color","occ"]
-    
     args = parser.parse_args(sys.argv[1:])         
     args.save_iterations.append(args.iterations)     
     args=args_init.argument_init(args)

@@ -204,27 +204,27 @@ class GaussianModel:
                 logging.info((f"rand sample coordinate weight: {rand_weight}"))
             # box_coord=box_coord
             self.box_coord=nn.Parameter(box_coord.requires_grad_(True))
-        # elif ( self.use_kmap_pjmap) and not self.use_xw_init_box_coord:
-        #     box_coord=torch.cat([self._xyz.max(dim=0)[0].unsqueeze(0),self._xyz.min(dim=0)[0].unsqueeze(0)]).detach().to(self._xyz.device)
-        #     box_coord[0,:]+=0.02*(box_coord[0]-box_coord[1])#3,2
-        #     box_coord[1,:]-=0.02*(box_coord[0]-box_coord[1])
+        elif ( self.use_kmap_pjmap) and not self.use_xw_init_box_coord:
+            box_coord=torch.cat([self._xyz.max(dim=0)[0].unsqueeze(0),self._xyz.min(dim=0)[0].unsqueeze(0)]).detach().to(self._xyz.device)
+            box_coord[0,:]+=0.02*(box_coord[0]-box_coord[1])#3,2
+            box_coord[1,:]-=0.02*(box_coord[0]-box_coord[1])
             
-        #     box_coord=box_coord.unsqueeze(0).repeat(self._xyz.shape[0],1,1)
-        #     if self.map_num>4:
-        #         norm_xyz=(self._xyz-self._xyz.min(dim=0)[0])/(self._xyz.max(dim=0)[0]-self._xyz.min(dim=0)[0])
-        #         norm_xyz=(norm_xyz-0.5)*2
-        #         for i in range(self.map_num-4):
-        #             rand_init_pos=(torch.rand(size=(self._xyz.shape[0],1,3),device=box_coord.device))#
-        #             box_coord=torch.cat([box_coord,rand_init_pos],dim=1)
-        #             rand_weight=torch.rand(size=(2,3),device="cuda")
-        #             rand_weight=rand_weight/rand_weight.sum(dim=-1).unsqueeze(1)
-        #             box_coord[:,-1,:2]=torch.einsum('bi,ni->nb', rand_weight, norm_xyz)*self.coord_scale
+            box_coord=box_coord.unsqueeze(0).repeat(self._xyz.shape[0],1,1)
+            if self.map_num>4:
+                norm_xyz=(self._xyz-self._xyz.min(dim=0)[0])/(self._xyz.max(dim=0)[0]-self._xyz.min(dim=0)[0])
+                norm_xyz=(norm_xyz-0.5)*2
+                for i in range(self.map_num-4):
+                    rand_init_pos=(torch.rand(size=(self._xyz.shape[0],1,3),device=box_coord.device))#
+                    box_coord=torch.cat([box_coord,rand_init_pos],dim=1)
+                    rand_weight=torch.rand(size=(2,3),device="cuda")
+                    rand_weight=rand_weight/rand_weight.sum(dim=-1).unsqueeze(1)
+                    box_coord[:,-1,:2]=torch.einsum('bi,ni->nb', rand_weight, norm_xyz)*self.coord_scale
                 
             
-        #     rand_init_pos=(torch.rand(size=(self._xyz.shape[0],1,3),device=box_coord.device))#
-        #     box_coord=torch.cat([box_coord,rand_init_pos],dim=1)
-        #     box_coord[:,-1,:]=box_coord[:,-1,:]*0+256*2*2/self.downsample_resolution
-        #     self.box_coord=nn.Parameter(box_coord.requires_grad_(True))
+            rand_init_pos=(torch.rand(size=(self._xyz.shape[0],1,3),device=box_coord.device))#
+            box_coord=torch.cat([box_coord,rand_init_pos],dim=1)
+            box_coord[:,-1,:]=box_coord[:,-1,:]*0+256*2*2/self.downsample_resolution
+            self.box_coord=nn.Parameter(box_coord.requires_grad_(True))
             
         else: raise NotImplementedError
         

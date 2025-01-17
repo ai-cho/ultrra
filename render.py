@@ -33,7 +33,7 @@ def render_interpolate(model_path, name, iteration, views, gaussians, pipeline, 
         select_idxs=[29]
     elif args.scene_name=="trevi":
         select_idxs=[55]
-        
+    print('scene_name: ', args.scene_name)
     render_path = os.path.join(model_path, name,"ours_{}".format(iteration), f"intrinsic_dynamic_interpolate")
     render_path_gt = os.path.join(model_path, name,"ours_{}".format(iteration), f"intrinsic_dynamic_interpolate","refer")
     makedirs(render_path, exist_ok=True)
@@ -132,6 +132,7 @@ def test_rendering_speed( views, gaussians, pipeline,background,use_cache=False)
     views=copy.deepcopy(views)
     length=100
     # view=views[0]
+
     for idx in range(length):
         view=views[idx] 
         view.original_image=torch.nn.functional.interpolate(view.original_image.unsqueeze(0),size=(800,800)).squeeze()

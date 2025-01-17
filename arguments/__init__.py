@@ -49,6 +49,7 @@ class ModelParams(ParamGroup):
         self.device="cuda:0"
         self.sh_degree = 3
         self._source_path = ""
+        self._evaluate_path = ""
         self._model_path = ""
         self._images = "images"
         self._resolution = 1#-1

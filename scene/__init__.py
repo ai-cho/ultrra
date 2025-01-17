@@ -39,10 +39,10 @@ class Scene:
 
         self.train_cameras = {}
         self.test_cameras = {}
-
         if os.path.exists(os.path.join(args.source_path, "sparse")):
-            scene_info = sceneLoadTypeCallbacks["Colmap"](args.source_path, args.images, args.eval)   #
+            scene_info = sceneLoadTypeCallbacks["Colmap"](args.source_path, args.evaluate_path, args.images, args.eval)   #
         elif os.path.exists(os.path.join(args.source_path, "transforms_train.json")):
+            # 여기 어차피 안돌아감. 무시하기.
             print("Found transforms_train.json file, assuming Blender data set!")
             scene_info = sceneLoadTypeCallbacks["Blender"](args.source_path, args.white_background, args.eval,data_perturb=args.data_perturb) #
         else:
@@ -69,6 +69,7 @@ class Scene:
         self.cameras_extent = scene_info.nerf_normalization["radius"]
 
         for resolution_scale in resolution_scales:
+
             print("Loading Training Cameras")
             self.train_cameras[resolution_scale] = cameraList_from_camInfos(scene_info.train_cameras, resolution_scale, args)#各个分辨率下的相机Camera(id,R,T,fovx,fovt,image,h，W,MVP矩阵)
             print("Loading Test Cameras")

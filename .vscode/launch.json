@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python 디버거: 현재 파일",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "1"
+            },
+            "args": [
+                "--source_path", "/workspace/ultrra_dev1/phase2/train/",
+                "--scene_name", "ultrra_testing",
+                "--model_path", "outputs/ultrra_testing",
+                "--resolution", "8",
+                "--iterations", "70000"
+            ]
+        }
+    ]
+}
